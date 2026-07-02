@@ -42,7 +42,9 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   max-height: 100vh;
+  max-height: 100dvh;
   overflow: hidden;
 }
 
@@ -53,7 +55,7 @@ body {
 }
 
 .title {
-  font-size: clamp(1.1rem, 2.8vw, 1.6rem);
+  font-size: clamp(1.35rem, 4.2vw, 1.9rem);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #1a2b3c;
@@ -241,7 +243,6 @@ body {
 }
 
 .stat-card {
-  aspect-ratio: 1 / 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -249,8 +250,9 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 8px;
-  padding: 0.35rem;
+  padding: 0.32rem 0.45rem;
   text-align: center;
+  min-height: 3.1rem;
 }
 
 .stat-label {
@@ -339,25 +341,114 @@ body {
 /* ── Responsive ── */
 @media (max-width: 720px) {
   body {
-    overflow: auto;
+    overflow: hidden;
   }
 
   .page {
-    height: auto;
-    max-height: none;
-    min-height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
   }
 
-  .milestone-tag {
-    max-width: 75%;
+  .header {
+    padding: 0.22rem 0.5rem 0.08rem;
   }
 
-  .milestone-tag p {
-    white-space: normal;
+  .title {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 0.56rem;
+    line-height: 1.2;
+  }
+
+  .dashboard {
+    gap: 0.28rem;
+    padding: 0 0.45rem 0.2rem;
+  }
+
+  .ocean-scene {
+    flex: 0 0 16dvh;
+    height: 16dvh;
+    min-height: 100px;
+    max-height: 128px;
+  }
+
+  .ship-container {
+    width: min(88vw, 360px);
+    top: 20%;
+  }
+
+  .stats-panel {
+    flex: 0 0 auto;
+    gap: 0.28rem;
+  }
+
+  .stat-card {
+    min-height: 0;
+    padding: 0.2rem 0.28rem;
+    border-radius: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.54rem;
+    margin-bottom: 0.04rem;
+    line-height: 1.1;
+  }
+
+  .stat-value {
+    font-size: 0.92rem;
+    line-height: 1.05;
+  }
+
+  .stat-unit {
+    font-size: 0.52rem;
+    line-height: 1.1;
+  }
+
+  .bottom-panel {
+    gap: 0.28rem;
+    min-height: 0;
+  }
+
+  .depth-chart-section {
+    padding: 0.28rem 0.38rem 0.22rem;
+    min-height: 0;
+  }
+
+  .chart-header {
+    margin-bottom: 0.15rem;
+  }
+
+  .section-title {
+    font-size: 0.66rem;
+  }
+
+  .section-meta {
+    font-size: 0.52rem;
   }
 
   .depth-chart-wrapper {
-    min-height: 120px;
+    min-height: 0;
+    flex: 1 1 auto;
+  }
+
+  .footer {
+    padding: 0.12rem 0.4rem 0.18rem;
+    font-size: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .milestone-tag {
+    max-width: 72%;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .milestone-tag p {
+    font-size: 0.56rem;
+    white-space: nowrap;
   }
 }
 
