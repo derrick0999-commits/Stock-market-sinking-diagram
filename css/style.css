@@ -1,0 +1,321 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --sky-top: #1a1a2e;
+  --sky-bottom: #16213e;
+  --water-surface: #1e6f9f;
+  --water-mid: #0d4a6e;
+  --water-deep: #051e30;
+  --accent-loss: #ff6b6b;
+  --accent-gold: #ffd93d;
+  --text-primary: #e8f4f8;
+  --text-muted: #8ba4b4;
+  --card-bg: rgba(10, 30, 50, 0.85);
+  --ship-sink: 0px;
+  --bubble-density: 5;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: var(--sky-top);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.header {
+  text-align: center;
+  padding: 1.5rem 1rem 0.5rem;
+  background: linear-gradient(180deg, var(--sky-top), transparent);
+  position: relative;
+  z-index: 10;
+}
+
+.title {
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+.dashboard {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+/* ── Ocean Scene ── */
+.ocean-scene {
+  position: relative;
+  height: 340px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.sky {
+  position: absolute;
+  inset: 0 0 40%;
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 60%, #0f3460 100%);
+}
+
+.water {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+}
+
+.waves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 80px;
+  z-index: 5;
+}
+
+.wave {
+  fill: var(--water-surface);
+  opacity: 0.85;
+}
+
+.wave-1 {
+  animation: wave-drift 6s ease-in-out infinite;
+}
+
+.wave-2 {
+  fill: #2580b0;
+  opacity: 0.7;
+  animation: wave-drift 8s ease-in-out infinite reverse;
+}
+
+.wave-3 {
+  fill: #1a6a96;
+  opacity: 0.5;
+  animation: wave-drift 10s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+@keyframes wave-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-25%); }
+}
+
+.water-depth {
+  position: absolute;
+  inset: 60px 0 0;
+  background: linear-gradient(180deg, var(--water-surface) 0%, var(--water-mid) 40%, var(--water-deep) 100%);
+}
+
+/* ── Ship ── */
+.ship-container {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  transform: translateX(-50%) translateY(var(--ship-sink));
+  z-index: 4;
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 180px;
+}
+
+.ship {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  animation: ship-rock 4s ease-in-out infinite;
+}
+
+@keyframes ship-rock {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+/* ── Bubbles ── */
+.bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+  animation: bubble-rise linear infinite;
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-320px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ── Milestone Card ── */
+.milestone-card {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  max-width: 90%;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  animation: card-float 3s ease-in-out infinite;
+}
+
+@keyframes card-float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-4px); }
+}
+
+.milestone-icon {
+  font-size: 1.1rem;
+  margin-right: 0.4rem;
+}
+
+.milestone-card p {
+  display: inline;
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+}
+
+/* ── Stats Panel ── */
+.stats-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1.2rem;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+
+.stat-value {
+  display: block;
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-unit {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.stat-loss .stat-value { color: var(--accent-loss); }
+.stat-pct .stat-value { color: #ff8c42; }
+.stat-price .stat-value { color: #6bcfff; }
+.stat-remaining .stat-value { color: #6bffb8; }
+
+/* ── Depth Chart ── */
+.depth-chart-section {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  backdrop-filter: blur(6px);
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.section-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.depth-chart-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#depth-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.footer-ticker {
+  margin-top: 0.3rem;
+  opacity: 0.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .ocean-scene {
+    height: 280px;
+  }
+
+  .ship-container {
+    width: 140px;
+    top: 30%;
+  }
+
+  .milestone-card p {
+    font-size: 0.75rem;
+  }
+}

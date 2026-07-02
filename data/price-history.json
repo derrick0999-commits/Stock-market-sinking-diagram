@@ -1,0 +1,20 @@
+{
+  "entries": [
+    {
+      "date": "2026-07-02",
+      "close_price": 382.5,
+      "market_value": 3442500.0,
+      "loss_amount": 1419480.0,
+      "loss_pct": 29.2,
+      "remaining_pct": 70.8
+    }
+  ],
+  "last_updated": "2026-07-02T13:25:45.883297+08:00",
+  "config_snapshot": {
+    "ticker": "5386.TWO",
+    "stock_name": "青雲",
+    "buy_price": 540.22,
+    "shares": 9000,
+    "cost_basis": 4861980
+  }
+}
