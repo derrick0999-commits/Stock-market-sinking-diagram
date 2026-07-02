@@ -19,7 +19,7 @@ function getMilestone(lossPct) {
 }
 
 function updateShipPosition(lossPct) {
-  const maxSink = 180;
+  const maxSink = 65;
   const sinkPx = Math.min(lossPct / 100, 1) * maxSink;
   document.documentElement.style.setProperty("--ship-sink", `${sinkPx}px`);
 }
@@ -48,19 +48,19 @@ function drawDepthChart(entries) {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
   const w = rect.width || 900;
-  const h = 280;
+  const h = rect.height || 160;
 
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   ctx.scale(dpr, dpr);
 
-  const pad = { top: 20, right: 20, bottom: 40, left: 60 };
+  const pad = { top: 14, right: 14, bottom: 28, left: 44 };
   const chartW = w - pad.left - pad.right;
   const chartH = h - pad.top - pad.bottom;
 
   if (entries.length === 0) {
-    ctx.fillStyle = "#8ba4b4";
-    ctx.font = "14px sans-serif";
+    ctx.fillStyle = "#5c6f82";
+    ctx.font = "12px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("尚無歷史資料，等待首次收盤更新...", w / 2, h / 2);
     return;
@@ -71,9 +71,9 @@ function drawDepthChart(entries) {
   const minLoss = Math.min(...lossPcts, 0);
 
   const grad = ctx.createLinearGradient(0, pad.top, 0, h - pad.bottom);
-  grad.addColorStop(0, "#1e6f9f");
-  grad.addColorStop(0.5, "#0d4a6e");
-  grad.addColorStop(1, "#051e30");
+  grad.addColorStop(0, "#b8e4f8");
+  grad.addColorStop(0.5, "#6ec4e8");
+  grad.addColorStop(1, "#1a6a9e");
   ctx.fillStyle = grad;
   ctx.fillRect(pad.left, pad.top, chartW, chartH);
 
@@ -92,16 +92,16 @@ function drawDepthChart(entries) {
     if (i === 0) ctx.moveTo(x, y);
     else ctx.lineTo(x, y);
   });
-  ctx.strokeStyle = "#ff6b6b";
-  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = "#e53935";
+  ctx.lineWidth = 2;
   ctx.stroke();
 
   ctx.lineTo(pad.left + (entries.length - 1) * xStep, pad.top + chartH);
   ctx.lineTo(pad.left, pad.top + chartH);
   ctx.closePath();
   const fillGrad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
-  fillGrad.addColorStop(0, "rgba(255, 107, 107, 0.3)");
-  fillGrad.addColorStop(1, "rgba(255, 107, 107, 0.05)");
+  fillGrad.addColorStop(0, "rgba(229, 57, 53, 0.25)");
+  fillGrad.addColorStop(1, "rgba(229, 57, 53, 0.04)");
   ctx.fillStyle = fillGrad;
   ctx.fill();
 
@@ -110,12 +110,12 @@ function drawDepthChart(entries) {
     const y = toY(entry.loss_pct);
     ctx.beginPath();
     ctx.arc(x, y, 3, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffd93d";
+    ctx.fillStyle = "#f57c00";
     ctx.fill();
   });
 
-  ctx.fillStyle = "#8ba4b4";
-  ctx.font = "11px sans-serif";
+  ctx.fillStyle = "#5c6f82";
+  ctx.font = "10px sans-serif";
   ctx.textAlign = "right";
   const yLabels = 5;
   for (let i = 0; i <= yLabels; i++) {
@@ -123,7 +123,7 @@ function drawDepthChart(entries) {
     const y = toY(val);
     ctx.fillText(`${val.toFixed(1)}%`, pad.left - 8, y + 4);
 
-    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.strokeStyle = "rgba(255,255,255,0.35)";
     ctx.beginPath();
     ctx.moveTo(pad.left, y);
     ctx.lineTo(pad.left + chartW, y);
@@ -135,11 +135,11 @@ function drawDepthChart(entries) {
   entries.forEach((entry, i) => {
     if (i % labelInterval !== 0 && i !== entries.length - 1) return;
     const x = pad.left + (entries.length > 1 ? i * xStep : chartW / 2);
-    ctx.fillText(entry.date.slice(5), x, h - pad.bottom + 20);
+    ctx.fillText(entry.date.slice(5), x, h - pad.bottom + 16);
   });
 
-  ctx.fillStyle = "#8ba4b4";
-  ctx.font = "10px sans-serif";
+  ctx.fillStyle = "#5c6f82";
+  ctx.font = "9px sans-serif";
   ctx.textAlign = "center";
   ctx.fillText("虧損深度 (%)", pad.left / 2, pad.top + chartH / 2);
 }

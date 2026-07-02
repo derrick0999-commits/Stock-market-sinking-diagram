@@ -7,77 +7,93 @@
 }
 
 :root {
-  --sky-top: #cfefff;
-  --sky-bottom: #8fd3ff;
-  --water-surface: #7fd0f2;
-  --water-mid: #3aa6d8;
-  --water-deep: #0b4a78;
-  --accent-loss: #ff6b6b;
-  --accent-gold: #ffd93d;
-  --text-primary: #0c2233;
-  --text-muted: #4e6a7a;
-  --card-bg: rgba(255, 255, 255, 0.78);
-  --card-border: rgba(20, 80, 120, 0.18);
+  --page-bg: #eef3f8;
+  --page-bg-alt: #f7f9fc;
+  --sky-top: #d9ecff;
+  --sky-bottom: #a8d8f5;
+  --water-surface: #7ec8ea;
+  --water-mid: #4aa8d8;
+  --water-deep: #1a6a9e;
+  --accent-loss: #e53935;
+  --accent-orange: #f57c00;
+  --accent-green: #2e7d32;
+  --text-primary: #1a2b3c;
+  --text-muted: #5c6f82;
+  --card-bg: #ffffff;
+  --card-border: rgba(80, 120, 160, 0.16);
   --ship-sink: 0px;
-  --bubble-density: 5;
 }
 
 html {
   font-size: 16px;
+  height: 100%;
 }
 
 body {
+  height: 100%;
+  overflow: hidden;
   font-family: "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
-  background: linear-gradient(180deg, var(--sky-top) 0%, #dff6ff 35%, #c7efff 60%, #eaf9ff 100%);
+  background: linear-gradient(180deg, var(--page-bg-alt) 0%, var(--page-bg) 100%);
   color: var(--text-primary);
-  min-height: 100vh;
-  line-height: 1.6;
+  line-height: 1.4;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .header {
+  flex: 0 0 auto;
   text-align: center;
-  padding: 1.5rem 1rem 0.5rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), transparent);
-  position: relative;
-  z-index: 10;
+  padding: 0.35rem 0.75rem 0.15rem;
 }
 
 .title {
-  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  font-size: clamp(1.1rem, 2.8vw, 1.6rem);
   font-weight: 700;
-  letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #f57c00, #e53935);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .subtitle {
-  font-size: 0.85rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
-  margin-top: 0.3rem;
 }
 
 .dashboard {
-  max-width: 960px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 0;
+  max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 1rem 2rem;
+  padding: 0 0.6rem 0.35rem;
 }
 
 /* ── Ocean Scene ── */
 .ocean-scene {
   position: relative;
-  height: 340px;
-  border-radius: 12px;
+  flex: 0 0 clamp(140px, 24vh, 200px);
+  height: clamp(140px, 24vh, 200px);
+  border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 10px 30px rgba(16, 74, 110, 0.18);
+  box-shadow: 0 4px 16px rgba(60, 100, 140, 0.12);
+  border: 1px solid var(--card-border);
 }
 
 .sky {
   position: absolute;
-  inset: 0 0 40%;
-  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 65%, #6ac7f0 100%);
+  inset: 0 0 38%;
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
 }
 
 .day-decor {
@@ -93,7 +109,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 55%;
+  height: 52%;
 }
 
 .waves {
@@ -101,28 +117,24 @@ body {
   top: 0;
   left: 0;
   width: 200%;
-  height: 80px;
+  height: 50px;
   z-index: 5;
 }
 
 .wave {
   fill: var(--water-surface);
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-.wave-1 {
-  animation: wave-drift 6s ease-in-out infinite;
-}
-
+.wave-1 { animation: wave-drift 6s ease-in-out infinite; }
 .wave-2 {
-  fill: #6fc8ef;
-  opacity: 0.7;
+  fill: #8fd4f0;
+  opacity: 0.75;
   animation: wave-drift 8s ease-in-out infinite reverse;
 }
-
 .wave-3 {
-  fill: #55b7e3;
-  opacity: 0.5;
+  fill: #6ec4e8;
+  opacity: 0.55;
   animation: wave-drift 10s ease-in-out infinite;
   animation-delay: -2s;
 }
@@ -134,31 +146,31 @@ body {
 
 .water-depth {
   position: absolute;
-  inset: 60px 0 0;
-  background: linear-gradient(180deg, var(--water-surface) 0%, var(--water-mid) 40%, var(--water-deep) 100%);
+  inset: 40px 0 0;
+  background: linear-gradient(180deg, var(--water-surface) 0%, var(--water-mid) 45%, var(--water-deep) 100%);
 }
 
 /* ── Ship ── */
 .ship-container {
   position: absolute;
   left: 50%;
-  top: 28%;
+  top: 22%;
   transform: translateX(-50%) translateY(var(--ship-sink));
   z-index: 4;
   transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-  width: clamp(340px, 55vw, 560px);
+  width: clamp(260px, 48%, 440px);
 }
 
 .ship {
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 10px 18px rgba(10, 40, 60, 0.25));
+  filter: drop-shadow(0 6px 12px rgba(10, 40, 60, 0.2));
   animation: ship-rock 4s ease-in-out infinite;
 }
 
 @keyframes ship-rock {
-  0%, 100% { transform: rotate(-2deg); }
-  50% { transform: rotate(2deg); }
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
 }
 
 /* ── Bubbles ── */
@@ -174,157 +186,190 @@ body {
   position: absolute;
   bottom: -10px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.18));
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
   animation: bubble-rise linear infinite;
 }
 
 @keyframes bubble-rise {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0.7;
-  }
-  80% {
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(-320px) scale(0.3);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) scale(1); opacity: 0.7; }
+  80% { opacity: 0.35; }
+  100% { transform: translateY(-180px) scale(0.3); opacity: 0; }
 }
 
-/* ── Milestone Card ── */
-.milestone-card {
+/* ── Milestone Tag ── */
+.milestone-tag {
   position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0.35rem;
+  left: 0.4rem;
   z-index: 6;
-  background: var(--card-bg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  max-width: min(62%, 320px);
+  padding: 0.15rem 0.5rem;
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 0.6rem 1.2rem;
-  max-width: 90%;
-  text-align: center;
-  backdrop-filter: blur(8px);
-  animation: card-float 3s ease-in-out infinite;
-}
-
-@keyframes card-float {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-4px); }
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(40, 70, 100, 0.1);
+  pointer-events: none;
 }
 
 .milestone-icon {
-  font-size: 1.1rem;
-  margin-right: 0.4rem;
+  font-size: 0.7rem;
+  flex-shrink: 0;
 }
 
-.milestone-card p {
-  display: inline;
-  font-size: 0.85rem;
-  color: #8a5a00;
+.milestone-tag p {
+  font-size: 0.62rem;
+  line-height: 1.25;
+  color: #7a5200;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ── Stats Panel ── */
+/* ── Bottom Panel ── */
+.bottom-panel {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 0;
+}
+
 .stats-panel {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
 }
 
 .stat-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 10px;
-  padding: 1.2rem;
+  border-radius: 8px;
+  padding: 0.4rem 0.35rem;
   text-align: center;
-  backdrop-filter: blur(6px);
 }
 
 .stat-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.4rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
 }
 
 .stat-value {
   display: block;
-  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-size: clamp(0.95rem, 2.2vw, 1.25rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  line-height: 1.2;
 }
 
 .stat-unit {
-  font-size: 0.8rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
 }
 
 .stat-loss .stat-value { color: var(--accent-loss); }
-.stat-pct .stat-value { color: #ff8c42; }
-.stat-price .stat-value { color: #6bcfff; }
-.stat-remaining .stat-value { color: #6bffb8; }
+.stat-pct .stat-value { color: var(--accent-orange); }
+.stat-price .stat-value { color: #1565c0; }
+.stat-remaining .stat-value { color: var(--accent-green); }
 
 /* ── Depth Chart ── */
 .depth-chart-section {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  backdrop-filter: blur(6px);
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem 0.35rem;
+}
+
+.chart-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  flex-shrink: 0;
 }
 
 .section-title {
-  font-size: 1rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  margin-bottom: 0.3rem;
+  white-space: nowrap;
 }
 
 .section-meta {
-  font-size: 0.8rem;
+  font-size: 0.58rem;
   color: var(--text-muted);
-  margin-bottom: 1rem;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .depth-chart-wrapper {
-  width: 100%;
-  overflow-x: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
 }
 
 #depth-chart {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
 }
 
 /* ── Footer ── */
 .footer {
+  flex: 0 0 auto;
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 0.2rem 0.5rem 0.35rem;
   color: var(--text-muted);
-  font-size: 0.75rem;
-}
-
-.footer-ticker {
-  margin-top: 0.3rem;
-  opacity: 0.6;
+  font-size: 0.58rem;
 }
 
 /* ── Responsive ── */
-@media (max-width: 600px) {
-  .ocean-scene {
-    height: 280px;
+@media (max-width: 720px) {
+  body {
+    overflow: auto;
   }
 
-  .ship-container {
-    width: min(92vw, 420px);
-    top: 29%;
+  .page {
+    height: auto;
+    max-height: none;
+    min-height: 100vh;
   }
 
-  .milestone-card p {
-    font-size: 0.75rem;
+  .stats-panel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .milestone-tag {
+    max-width: 75%;
+  }
+
+  .milestone-tag p {
+    white-space: normal;
+  }
+
+  .depth-chart-wrapper {
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 420px) {
+  .chart-header {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .section-meta {
+    text-align: left;
   }
 }
