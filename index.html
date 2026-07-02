@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>青雲(5386) 沉沒基金</title>
+  <meta name="description" content="幽默諷刺風格的股票虧損視覺化儀表板 — 看著你的投資隨波逐流，一路下沉。">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">青雲(5386) 沉沒基金</h1>
+    <p class="subtitle">投資組合海事事故即時通報系統 · 非官方 · 純娛樂</p>
+  </header>
+
+  <main class="dashboard">
+  <section class="ocean-scene" aria-label="沉船視覺化">
+    <div class="sky"></div>
+
+    <div class="bubbles" id="bubbles" aria-hidden="true"></div>
+
+    <div class="ship-container" id="ship-container">
+      <svg class="ship" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="hullGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#8B4513"/>
+            <stop offset="100%" stop-color="#5C2E0A"/>
+          </linearGradient>
+        </defs>
+        <!-- Mast -->
+        <line x1="100" y1="15" x2="100" y2="55" stroke="#4a3728" stroke-width="3"/>
+        <polygon points="100,15 130,35 100,40" fill="#e8e0d0" opacity="0.9"/>
+        <!-- Hull -->
+        <path d="M 30 70 Q 100 90 170 70 L 160 85 Q 100 100 40 85 Z" fill="url(#hullGrad)"/>
+        <rect x="55" y="55" width="90" height="18" rx="2" fill="#6B3A1F"/>
+        <!-- Portholes -->
+        <circle cx="70" cy="64" r="4" fill="#87CEEB" opacity="0.7"/>
+        <circle cx="100" cy="64" r="4" fill="#87CEEB" opacity="0.5"/>
+        <circle cx="130" cy="64" r="4" fill="#87CEEB" opacity="0.3"/>
+        <!-- Waterline mark -->
+        <line x1="35" y1="72" x2="165" y2="72" stroke="#4a90c2" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="water">
+      <svg class="waves" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wave wave-1" d="M0,40 C150,60 300,20 450,40 C600,60 750,20 900,40 C1050,60 1200,20 1200,40 L1200,80 L0,80 Z"/>
+        <path class="wave wave-2" d="M0,50 C200,30 400,70 600,50 C800,30 1000,70 1200,50 L1200,80 L0,80 Z"/>
+        <path class="wave wave-3" d="M0,45 C100,65 250,25 400,45 C550,65 700,25 850,45 C1000,65 1150,25 1200,45 L1200,80 L0,80 Z"/>
+      </svg>
+      <div class="water-depth"></div>
+    </div>
+
+    <div class="milestone-card" id="milestone-card">
+      <span class="milestone-icon">⚓</span>
+      <p id="milestone-text">正在讀取航海日誌...</p>
+    </div>
+  </section>
+
+  <section class="stats-panel" aria-label="虧損數據">
+    <div class="stat-card stat-loss">
+      <span class="stat-label">累計虧損</span>
+      <span class="stat-value" id="loss-amount">—</span>
+      <span class="stat-unit">NT$</span>
+    </div>
+    <div class="stat-card stat-pct">
+      <span class="stat-label">沉沒深度</span>
+      <span class="stat-value" id="loss-pct">—</span>
+      <span class="stat-unit">%</span>
+    </div>
+    <div class="stat-card stat-price">
+      <span class="stat-label">今日收盤</span>
+      <span class="stat-value" id="close-price">—</span>
+      <span class="stat-unit">元</span>
+    </div>
+    <div class="stat-card stat-remaining">
+      <span class="stat-label">殘餘本金</span>
+      <span class="stat-value" id="remaining-pct">—</span>
+      <span class="stat-unit">%</span>
+    </div>
+  </section>
+
+  <section class="depth-chart-section" aria-label="深度走勢圖">
+    <h2 class="section-title">海底深度剖面 · 虧損走勢</h2>
+    <p class="section-meta" id="chart-meta">載入中...</p>
+    <div class="depth-chart-wrapper">
+      <canvas id="depth-chart" width="900" height="280"></canvas>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <p>資料每日台北時間收盤後自動更新 · 僅供娛樂，不構成任何投資建議</p>
+    <p class="footer-ticker">5386.TWO · 青雲科技</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
