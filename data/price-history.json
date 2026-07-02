@@ -1,6 +1,46 @@
 {
   "entries": [
     {
+      "date": "2026-06-25",
+      "close_price": 538.0,
+      "market_value": 4842000.0,
+      "loss_amount": 19980.0,
+      "loss_pct": 0.41,
+      "remaining_pct": 99.59
+    },
+    {
+      "date": "2026-06-26",
+      "close_price": 520.0,
+      "market_value": 4680000.0,
+      "loss_amount": 181980.0,
+      "loss_pct": 3.74,
+      "remaining_pct": 96.26
+    },
+    {
+      "date": "2026-06-29",
+      "close_price": 524.0,
+      "market_value": 4716000.0,
+      "loss_amount": 145980.0,
+      "loss_pct": 3.0,
+      "remaining_pct": 97.0
+    },
+    {
+      "date": "2026-06-30",
+      "close_price": 472.0,
+      "market_value": 4248000.0,
+      "loss_amount": 613980.0,
+      "loss_pct": 12.63,
+      "remaining_pct": 87.37
+    },
+    {
+      "date": "2026-07-01",
+      "close_price": 425.0,
+      "market_value": 3825000.0,
+      "loss_amount": 1036980.0,
+      "loss_pct": 21.33,
+      "remaining_pct": 78.67
+    },
+    {
       "date": "2026-07-02",
       "close_price": 382.5,
       "market_value": 3442500.0,
@@ -9,7 +49,7 @@
       "remaining_pct": 70.8
     }
   ],
-  "last_updated": "2026-07-02T13:42:35.615730+08:00",
+  "last_updated": "2026-07-02T14:20:43.035468+08:00",
   "config_snapshot": {
     "ticker": "5386.TWO",
     "stock_name": "青雲",

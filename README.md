@@ -72,7 +72,16 @@ pip install -r requirements.txt
 python scripts/fetch_price.py
 ```
 
-執行後會更新 `data/price-history.json`，手動 commit 並 push 即可。
+### 方法三：一次性回填歷史股價
+
+若走勢圖需要補齊過去區間（例如 2026/6/25 起），可執行：
+
+```bash
+pip install -r requirements.txt
+python scripts/backfill_history.py
+```
+
+腳本會從 Yahoo Finance 抓取歷史收盤價，合併寫入 `data/price-history.json`（已存在的日期會覆寫更新）。之後每日排程仍由 `fetch_price.py` 負責追加。
 
 ## GitHub Pages 部署設定
 
