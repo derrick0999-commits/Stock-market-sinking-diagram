@@ -58,14 +58,14 @@
     },
     {
       "date": "2026-07-07",
-      "close_price": 439.0,
-      "market_value": 3951000.0,
-      "loss_amount": 910980.0,
-      "loss_pct": 18.74,
-      "remaining_pct": 81.26
+      "close_price": 446.5,
+      "market_value": 4018500.0,
+      "loss_amount": 843480.0,
+      "loss_pct": 17.35,
+      "remaining_pct": 82.65
     }
   ],
-  "last_updated": "2026-07-07T09:44:39.344033+08:00",
+  "last_updated": "2026-07-07T10:11:32.750477+08:00",
   "config_snapshot": {
     "ticker": "5386.TWO",
     "stock_name": "青雲",
