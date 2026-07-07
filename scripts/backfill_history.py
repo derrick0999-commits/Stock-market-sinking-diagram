@@ -38,6 +38,8 @@ def main() -> int:
     for ts, row in hist.iterrows():
         date_str = ts.strftime("%Y-%m-%d")
         close_price = float(row["Close"])
+        if close_price != close_price or close_price <= 0:  # skip NaN / invalid
+            continue
         metrics = compute_metrics(config, close_price)
         by_date[date_str] = {
             "date": date_str,
