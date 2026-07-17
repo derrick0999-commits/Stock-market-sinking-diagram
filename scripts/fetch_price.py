@@ -15,6 +15,11 @@ HISTORY_PATH = ROOT / "data" / "price-history.json"
 
 TAIPEI = timezone(timedelta(hours=8))
 
+# Yahoo sometimes writes premature ex-rights/ex-dividend prices into the
+# latest daily bar while regularMarketPrice still reflects the real close.
+# Reject history bars that disagree with the quote by this relative amount.
+QUOTE_DISAGREE_PCT = 0.05
+
 
 def load_json(path: Path) -> dict:
     with open(path, encoding="utf-8") as f:
@@ -35,19 +40,72 @@ def _is_valid_entry(entry: dict) -> bool:
         return False
 
 
+def _quote_price(stock: yf.Ticker) -> float | None:
+    """Best-effort last traded / regular-session price from Yahoo quote fields."""
+    try:
+        info = stock.info or {}
+    except Exception:
+        info = {}
+
+    for key in ("regularMarketPrice", "currentPrice", "postMarketPrice"):
+        value = info.get(key)
+        try:
+            price = float(value)
+        except (TypeError, ValueError):
+            continue
+        if not math.isnan(price) and price > 0:
+            return price
+    return None
+
+
+def _should_prefer_quote(hist_close: float, quote: float, prev_close: float | None) -> bool:
+    if quote <= 0:
+        return False
+    disagree = abs(hist_close - quote) / quote
+    if disagree < QUOTE_DISAGREE_PCT:
+        return False
+    if prev_close is None or prev_close <= 0:
+        return True
+    # Prefer whichever price is closer to the prior session close.
+    return abs(quote - prev_close) < abs(hist_close - prev_close)
+
+
 def fetch_close_price(ticker: str) -> tuple[str, float]:
     """Return (date_str, close_price) for the latest trading day."""
     stock = yf.Ticker(ticker)
-    hist = stock.history(period="5d")
+    hist = stock.history(period="10d", auto_adjust=False)
 
     if hist.empty:
         raise RuntimeError(f"No price data returned for {ticker}")
 
-    last_row = hist.iloc[-1]
-    close_price = float(last_row["Close"])
-    if math.isnan(close_price) or close_price <= 0:
-        raise RuntimeError(f"Invalid close price for {ticker}: {close_price}")
+    # Skip zero-volume placeholder rows when a real session exists after them.
+    usable = hist
+    if "Volume" in hist.columns and len(hist) > 1:
+        nonzero = hist[hist["Volume"].fillna(0) > 0]
+        if not nonzero.empty:
+            usable = nonzero
+
+    last_row = usable.iloc[-1]
+    hist_close = float(last_row["Close"])
+    if math.isnan(hist_close) or hist_close <= 0:
+        raise RuntimeError(f"Invalid close price for {ticker}: {hist_close}")
     date_str = last_row.name.strftime("%Y-%m-%d")
+
+    prev_close = None
+    if len(usable) >= 2:
+        prev_close = float(usable.iloc[-2]["Close"])
+
+    quote = _quote_price(stock)
+    close_price = hist_close
+    if quote is not None and _should_prefer_quote(hist_close, quote, prev_close):
+        print(
+            f"Warning: Yahoo history close {hist_close:.4f} disagrees with "
+            f"quote {quote:.4f} on {date_str}; using quote "
+            f"(likely premature ex-rights adjustment).",
+            file=sys.stderr,
+        )
+        close_price = quote
+
     return date_str, close_price
 
 
