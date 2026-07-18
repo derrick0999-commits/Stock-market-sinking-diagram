@@ -4,6 +4,12 @@
 
 青雲(5386) 沉沒基金 — a pure static HTML/CSS/JS stock-loss visualization dashboard, plus a Python data updater. Standard details are in `README.md`.
 
+### Cloud environment (harness)
+- Repo config: `.cursor/environment.json` → runs `.cursor/install.sh` on boot.
+- Install/update is **dependency refresh only** (idempotent): create `.venv` + `pip install -r requirements.txt` when present; `npm ci`/`npm install` only if `package.json` exists.
+- Do **not** add `start` / `terminals` / build / migration / deploy to `environment.json` unless the commander revises harness rules.
+- No Cursor Cloud Secrets for this project (public Yahoo Finance data only).
+
 ### Run (development) — static site
 - No build step. Serve the repo root and open the page:
   ```
@@ -12,8 +18,7 @@
   → http://localhost:8080 . The frontend (`js/app.js`) fetches `data/price-history.json`, which is committed, so the dashboard (sinking ship + depth chart) renders standalone with no backend or secrets.
 
 ### Data updater (Python)
-- The update script provisions a virtualenv at `.venv` and installs `requirements.txt` (`yfinance`).
-- Run: `./.venv/bin/python scripts/fetch_price.py` (or `scripts/backfill_history.py`). Requires egress to Yahoo Finance (available in the cloud VM).
+- Prefer the cloud install venv: `./.venv/bin/python scripts/fetch_price.py` (or `scripts/backfill_history.py`). Requires egress to Yahoo Finance (available in the cloud VM).
 - Note: this **overwrites the tracked `data/price-history.json`** (at minimum the `last_updated` timestamp). Revert with `git checkout -- data/price-history.json` if you don't intend to commit the refreshed data.
 
 ## 治理定位（雲端 agent 職權 · 永久規則）
