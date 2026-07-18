@@ -54,7 +54,7 @@ function getMilestone(lossPct) {
 }
 
 function updateShipPosition(lossPct) {
-  const maxSink = 72;
+  const maxSink = 56;
   const sinkPx = Math.min(lossPct / 100, 1) * maxSink;
   document.documentElement.style.setProperty("--ship-sink", `${sinkPx}px`);
 }
@@ -149,7 +149,9 @@ function drawDepthChart(entries, config = {}) {
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, w, h);
 
-  const pad = { top: 16, right: 18, bottom: 28, left: 46 };
+  const pad = h < 120
+    ? { top: 8, right: 10, bottom: 18, left: 36 }
+    : { top: 12, right: 14, bottom: 22, left: 42 };
   const chartW = w - pad.left - pad.right;
   const chartH = h - pad.top - pad.bottom;
 
