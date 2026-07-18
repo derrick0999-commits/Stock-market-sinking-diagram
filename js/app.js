@@ -54,7 +54,7 @@ function getMilestone(lossPct) {
 }
 
 function updateShipPosition(lossPct) {
-  const maxSink = 72;
+  const maxSink = 56;
   const sinkPx = Math.min(lossPct / 100, 1) * maxSink;
   document.documentElement.style.setProperty("--ship-sink", `${sinkPx}px`);
 }
@@ -149,7 +149,9 @@ function drawDepthChart(entries, config = {}) {
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, w, h);
 
-  const pad = { top: 16, right: 18, bottom: 28, left: 46 };
+  const pad = h < 120
+    ? { top: 8, right: 10, bottom: 18, left: 36 }
+    : { top: 12, right: 14, bottom: 22, left: 42 };
   const chartW = w - pad.left - pad.right;
   const chartH = h - pad.top - pad.bottom;
 
@@ -268,17 +270,19 @@ async function loadData() {
     const data = await res.json();
     const entries = data.entries || [];
     const config = data.config_snapshot || {};
+    cachedEntries = entries;
+    cachedConfig = config;
 
     if (entries.length === 0) {
       document.getElementById("milestone-text").textContent = "船隻待命中，尚未收到任何航海數據...";
-      drawDepthChart([], config);
+      redrawChart();
       return;
     }
 
     const latest = entries[entries.length - 1];
     updateDashboard(latest, config);
     try {
-      drawDepthChart(entries, config);
+      redrawChart();
     } catch (chartErr) {
       console.error("Chart render failed:", chartErr);
       document.getElementById("chart-meta").textContent = "走勢圖渲染失敗，數據已載入";
@@ -290,16 +294,33 @@ async function loadData() {
   }
 }
 
+let cachedEntries = [];
+let cachedConfig = {};
+let resizeTimer;
+
+function redrawChart() {
+  try {
+    drawDepthChart(cachedEntries, cachedConfig);
+  } catch (_) {
+    /* ignore transient layout sizes */
+  }
+}
+
 initPassengerMode();
 loadData();
 
-let resizeTimer;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    fetch(dataUrl())
-      .then((r) => r.json())
-      .then((data) => drawDepthChart(data.entries || [], data.config_snapshot || {}))
-      .catch(() => {});
-  }, 200);
+  resizeTimer = setTimeout(redrawChart, 120);
 });
+
+const chartWrap = document.querySelector(".depth-chart-wrapper");
+if (chartWrap && typeof ResizeObserver !== "undefined") {
+  const ro = new ResizeObserver(() => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(redrawChart, 80);
+  });
+  ro.observe(chartWrap);
+}
+
+
