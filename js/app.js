@@ -90,13 +90,24 @@ function showPassengerRoast() {
   const hint = document.getElementById("ship-hint");
   if (!callouts || !shipHit) return;
 
+  const nodes = [...callouts.querySelectorAll(".pax-callout")];
+  if (nodes.length === 0) return;
+
+  // One-at-a-time roll call — avoids overlapping bubbles on a small ship
+  const active = roastRound % nodes.length;
   callouts.hidden = false;
-  callouts.querySelectorAll(".pax-callout").forEach((el, i) => {
+  nodes.forEach((el, i) => {
     const paxId = el.dataset.pax || PAX_ORDER[i];
-    el.textContent = lineForPax(paxId, roastRound);
-    el.style.animation = "none";
-    void el.offsetWidth;
-    el.style.animation = "";
+    if (i === active) {
+      el.hidden = false;
+      el.textContent = lineForPax(paxId, Math.floor(roastRound / nodes.length));
+      el.style.animation = "none";
+      void el.offsetWidth;
+      el.style.animation = "";
+    } else {
+      el.hidden = true;
+      el.textContent = "";
+    }
   });
   roastRound += 1;
 
@@ -106,8 +117,12 @@ function showPassengerRoast() {
   clearTimeout(roastTimer);
   roastTimer = setTimeout(() => {
     callouts.hidden = true;
+    nodes.forEach((el) => {
+      el.hidden = true;
+      el.textContent = "";
+    });
     shipHit.classList.remove("is-speaking");
-  }, 3800);
+  }, 2800);
 }
 
 function initPassengerMode() {
