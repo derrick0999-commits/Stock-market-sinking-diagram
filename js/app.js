@@ -268,17 +268,19 @@ async function loadData() {
     const data = await res.json();
     const entries = data.entries || [];
     const config = data.config_snapshot || {};
+    cachedEntries = entries;
+    cachedConfig = config;
 
     if (entries.length === 0) {
       document.getElementById("milestone-text").textContent = "船隻待命中，尚未收到任何航海數據...";
-      drawDepthChart([], config);
+      redrawChart();
       return;
     }
 
     const latest = entries[entries.length - 1];
     updateDashboard(latest, config);
     try {
-      drawDepthChart(entries, config);
+      redrawChart();
     } catch (chartErr) {
       console.error("Chart render failed:", chartErr);
       document.getElementById("chart-meta").textContent = "走勢圖渲染失敗，數據已載入";
@@ -290,16 +292,33 @@ async function loadData() {
   }
 }
 
+let cachedEntries = [];
+let cachedConfig = {};
+let resizeTimer;
+
+function redrawChart() {
+  try {
+    drawDepthChart(cachedEntries, cachedConfig);
+  } catch (_) {
+    /* ignore transient layout sizes */
+  }
+}
+
 initPassengerMode();
 loadData();
 
-let resizeTimer;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    fetch(dataUrl())
-      .then((r) => r.json())
-      .then((data) => drawDepthChart(data.entries || [], data.config_snapshot || {}))
-      .catch(() => {});
-  }, 200);
+  resizeTimer = setTimeout(redrawChart, 120);
 });
+
+const chartWrap = document.querySelector(".depth-chart-wrapper");
+if (chartWrap && typeof ResizeObserver !== "undefined") {
+  const ro = new ResizeObserver(() => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(redrawChart, 80);
+  });
+  ro.observe(chartWrap);
+}
+
+
