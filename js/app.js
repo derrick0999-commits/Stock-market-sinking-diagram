@@ -281,16 +281,16 @@ function drawSparkChart(entries, actions) {
 /* ── Speech bubbles ── */
 
 function popSpeech(line) {
-  const stage = document.getElementById("stage");
+  const hero = document.getElementById("hero");
   const bubbles = document.getElementById("bubbles");
-  if (!stage || !bubbles) return;
+  if (!hero || !bubbles) return;
 
   const el = document.createElement("div");
   el.className = `speech go${line.w === "cap" ? " cap" : ""}`;
   el.textContent = line.t;
-  const cx = stage.clientWidth * 0.5 + (Math.random() * 40 - 20);
+  const cx = hero.clientWidth * 0.5 + (Math.random() * 40 - 20);
   el.style.left = `${cx}px`;
-  el.style.top = "23%";
+  el.style.top = "18%";
   bubbles.appendChild(el);
   setTimeout(() => el.remove(), 3100);
 }
@@ -307,8 +307,8 @@ function onShipClick() {
 }
 
 function initAmbientBubbles() {
-  const stage = document.getElementById("stage");
-  if (!stage) return;
+  const hero = document.getElementById("hero");
+  if (!hero) return;
   for (let i = 0; i < 9; i++) {
     const b = document.createElement("div");
     b.className = "amb";
@@ -316,10 +316,10 @@ function initAmbientBubbles() {
     b.style.width = `${s}px`;
     b.style.height = `${s}px`;
     b.style.left = `${Math.random() * 100}%`;
-    b.style.top = `${58 + Math.random() * 38}%`;
+    b.style.top = `${50 + Math.random() * 45}%`;
     b.style.animationDuration = `${7 + Math.random() * 7}s`;
     b.style.animationDelay = `${-Math.random() * 7}s`;
-    stage.appendChild(b);
+    hero.appendChild(b);
   }
 }
 

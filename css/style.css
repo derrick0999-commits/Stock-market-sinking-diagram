@@ -38,27 +38,29 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ── Stage：流式 flex；Hero 固定高；多餘高度由 spacer 吸收 ── */
 .stage {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100%;
+  min-height: 100dvh;
+  height: 100dvh;
   max-width: 480px;
   margin: 0 auto;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  gap: clamp(0.4rem, 1.2vh, 0.7rem);
   padding:
-    env(safe-area-inset-top, 0px)
+    max(10px, env(safe-area-inset-top, 0px))
     env(safe-area-inset-right, 0px)
-    env(safe-area-inset-bottom, 0px)
+    max(12px, env(safe-area-inset-bottom, 0px))
     env(safe-area-inset-left, 0px);
 }
 
 .top {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 14px 20px 0;
-  z-index: 6;
+  flex: 0 0 auto;
+  padding: 4px 20px 0;
+  z-index: 2;
 }
 
 .eyebrow {
@@ -71,7 +73,7 @@ body {
 .title {
   font-family: "Noto Serif TC", serif;
   font-weight: 900;
-  font-size: clamp(2rem, 9vw, 38px);
+  font-size: clamp(1.85rem, 8vw, 38px);
   line-height: 0.98;
   color: var(--ink);
   letter-spacing: 0.04em;
@@ -80,16 +82,25 @@ body {
 .sub {
   font-family: "Noto Serif TC", serif;
   font-weight: 700;
-  font-size: clamp(1rem, 4.5vw, 19px);
+  font-size: clamp(0.95rem, 4vw, 19px);
   color: var(--alarm);
   letter-spacing: 0.1em;
+}
+
+/* ── Hero：固定高度區間；船／海面在內部 absolute，不隨 dvh 拉開空洞 ── */
+.hero {
+  position: relative;
+  flex: 0 0 auto;
+  height: clamp(140px, 24vh, 200px);
+  margin: 0;
+  overflow: hidden;
 }
 
 .waterline {
   position: absolute;
   left: 0;
   right: 0;
-  top: 36%;
+  top: 42%;
   height: 2px;
   z-index: 4;
   background: repeating-linear-gradient(90deg, var(--sun) 0 12px, transparent 12px 22px);
@@ -110,7 +121,7 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  top: 36%;
+  top: 42%;
   bottom: 0;
   z-index: 5;
   pointer-events: none;
@@ -125,8 +136,8 @@ body {
 .ship {
   position: absolute;
   left: 56%;
-  top: 18%;
-  width: min(62vw, 250px);
+  top: 8%;
+  width: min(58vw, 230px);
   transform: translateX(-50%) rotate(17deg);
   z-index: 5;
   cursor: pointer;
@@ -162,7 +173,7 @@ body {
 .tap-hint {
   position: absolute;
   left: 56%;
-  top: calc(30% - 4px);
+  top: 4%;
   transform: translateX(-50%);
   z-index: 6;
   font-size: 11px;
@@ -171,6 +182,7 @@ body {
   letter-spacing: 0.08em;
   animation: blink 2.4s infinite;
   pointer-events: none;
+  white-space: nowrap;
 }
 
 .tap-hint.is-hidden {
@@ -245,16 +257,22 @@ body {
 
 @keyframes rise {
   from { transform: translateY(0); }
-  to { transform: translateY(-50vh); }
+  to { transform: translateY(-40vh); }
+}
+
+/* ── 主數字／走勢／殘酷三格：緊湊一組，不被拉開 ── */
+.panel {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.45rem, 1.4vh, 0.85rem);
 }
 
 .sunk {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 42%;
-  z-index: 3;
+  flex: 0 0 auto;
   text-align: center;
+  padding: 0 16px;
+  z-index: 3;
 }
 
 .sunk .k {
@@ -266,10 +284,10 @@ body {
 .sunk .big {
   font-family: "Noto Serif TC", serif;
   font-weight: 900;
-  font-size: clamp(2rem, 10vw, 46px);
+  font-size: clamp(1.85rem, 8vw, 46px);
   color: var(--alarm);
   line-height: 1.05;
-  margin-top: 6px;
+  margin-top: 4px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -278,7 +296,7 @@ body {
 }
 
 .sunk .depth {
-  margin-top: 12px;
+  margin-top: 8px;
   font-size: 13px;
   color: #cddceb;
   letter-spacing: 0.05em;
@@ -292,10 +310,8 @@ body {
 }
 
 .spark {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 60%;
+  flex: 0 0 auto;
+  padding: 0 24px;
   z-index: 3;
 }
 
@@ -308,7 +324,7 @@ body {
 
 .spark svg {
   width: 100%;
-  height: 52px;
+  height: clamp(40px, 6vh, 52px);
   display: block;
 }
 
@@ -322,14 +338,11 @@ body {
 }
 
 .wreck {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 84px;
-  z-index: 3;
+  flex: 0 0 auto;
   display: flex;
   gap: 8px;
   padding: 0 16px;
+  z-index: 3;
 }
 
 .slab {
@@ -356,16 +369,15 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.slab.hero .v {
+.slab.hero-slab .v {
   font-size: clamp(1.1rem, 5vw, 27px);
 }
 
+/* CTA：margin-top:auto 推到底；多餘高度成為 CTA 上方海洋（非走勢／三格之間） */
 .cta {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: max(20px, env(safe-area-inset-bottom, 0px));
-  z-index: 5;
+  flex: 0 0 auto;
+  margin: auto 16px 0;
+  width: calc(100% - 32px);
   padding: 14px;
   border: none;
   border-radius: 12px;
@@ -377,35 +389,43 @@ body {
   letter-spacing: 0.08em;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  z-index: 5;
 }
 
 .cta:active {
   transform: scale(0.98);
 }
 
+/* 矮螢幕：縮小 Hero／字級，允許極小捲動優於重疊 */
 @media (max-height: 700px) {
-  .ship {
-    top: 15%;
-    width: min(56vw, 220px);
+  .hero {
+    height: clamp(110px, 22vh, 160px);
   }
 
-  .sunk {
-    top: 40%;
+  .ship {
+    width: min(52vw, 200px);
   }
 
   .sunk .big {
-    font-size: clamp(1.7rem, 8vw, 38px);
-  }
-
-  .spark {
-    top: 58%;
-  }
-
-  .wreck {
-    bottom: 76px;
+    font-size: clamp(1.55rem, 7vw, 36px);
   }
 
   .slab .v {
     font-size: clamp(0.9rem, 4vw, 20px);
+  }
+
+  .cta {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-height: 600px) {
+  .hero {
+    height: 100px;
+  }
+
+  .sunk .depth {
+    margin-top: 4px;
   }
 }
