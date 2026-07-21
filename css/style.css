@@ -186,11 +186,11 @@ body {
 }
 
 .tap-hint {
-  /* 船身下方、緊鄰海面線上方（靜態引導） */
+  /* 船身下方、緊鄰海面線上方（靜態引導；與小人頭頂氣泡區垂直分開） */
   position: absolute;
   left: 56%;
-  top: calc(42% - 1.35rem);
-  transform: translateX(-50%);
+  top: 42%;
+  transform: translate(-50%, calc(-100% - 6px));
   z-index: 6;
   font-size: 11px;
   color: #fff;
@@ -206,9 +206,9 @@ body {
   display: none;
 }
 
-/* 氣泡顯示期間淡化，與小人頭頂氣泡區垂直分開 */
+/* 氣泡顯示期間淡化，與小人頭頂氣泡區垂直分開（雙保險） */
 .hero.is-speaking .tap-hint {
-  opacity: 0.12;
+  opacity: 0;
   animation: none;
 }
 
