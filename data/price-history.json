@@ -1241,9 +1241,26 @@
       "price_loss_amount": 1689480.0,
       "price_loss_pct": 34.85,
       "price_remaining_pct": 65.15
+    },
+    {
+      "date": "2026-10-27",
+      "close_price": 235.0,
+      "market_value": 3172500.0,
+      "total_value": 3186000.0,
+      "cash_received": 13500.0,
+      "shares": 13500,
+      "adj_close": 235.0,
+      "restored_buy_price": 359.15,
+      "restored_cost_basis": 4848480.0,
+      "loss_amount": 1675980.0,
+      "loss_pct": 34.47,
+      "remaining_pct": 65.53,
+      "price_loss_amount": 1675980.0,
+      "price_loss_pct": 34.57,
+      "price_remaining_pct": 65.43
     }
   ],
-  "last_updated": "2026-10-26T23:21:45.678130+08:00",
+  "last_updated": "2026-10-27T21:28:37.572538+08:00",
   "config_snapshot": {
     "ticker": "5386.TWO",
     "stock_name": "青雲",
