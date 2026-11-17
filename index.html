@@ -32,7 +32,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5">
   <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png?v=5">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=5">
-  <link rel="stylesheet" href="css/style.css?v=24">
+  <link rel="stylesheet" href="css/style.css?v=27">
 </head>
 <body>
 <div class="app">
@@ -52,14 +52,15 @@
       <span class="chip" id="seaChip">大浪</span>
     </div>
     <div class="ticker" id="ticker" aria-live="polite"></div>
-    <button type="button" class="dialog" id="dialog" aria-label="跟船長講話">
-      <span class="portrait"><span id="face"></span></span>
+    <div class="dialog" id="dialog">
+      <button type="button" class="portrait" id="portrait" aria-label="換船長的大頭照"><span id="face"></span><span class="cam" id="cam" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 3.5h2l1-1.5h4l1 1.5h2v6.5H1z" fill="currentColor"/><circle cx="6" cy="6.6" r="2" fill="#0b1d2f"/></svg></span></button>
+      <button type="button" class="unphoto" id="unphoto" aria-label="拿掉大頭照，換回卡通頭" hidden>×</button>
+      <input type="file" id="photoIn" accept="image/*" hidden>
       <span class="dtext">
-        <span class="drow"><span class="dname" id="dname">船長（你朋友）</span><span class="mood" id="mood">崩潰中</span><span class="bpm" aria-label="心跳"><svg width="34" height="14" viewBox="0 0 34 14" aria-hidden="true"><polyline class="ecg" id="ecg" points="0,8 8,8 11,2 14,13 17,5 19,8 34,8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span id="bpm">145</span></span></span>
-        <span class="dline" id="dline">老婆千萬不要打開那個 App。</span>
-        <span class="dhint">點這裡繼續聽他說</span>
+        <span class="drow"><input id="capName" class="dname" maxlength="8" placeholder="船長 ✎" autocomplete="off" enterkeyhint="done" aria-label="幫船長取名"><span class="mood" id="mood">崩潰中</span><span class="bpm" aria-label="心跳"><svg width="26" height="12" viewBox="0 0 34 14" aria-hidden="true"><polyline class="ecg" id="ecg" points="0,8 8,8 11,2 14,13 17,5 19,8 34,8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span id="bpm">145</span></span></span>
+        <button type="button" class="dline" id="dline" aria-label="跟船長講話">老婆千萬不要打開那個 App。</button>
       </span>
-    </button>
+    </div>
   </section>
 
   <div class="actions">
@@ -70,16 +71,8 @@
     <button type="button" class="act" id="poke">戳船長一下</button>
   </div>
 
-  <section class="readout" aria-label="當日讀數">
-    <div class="loss"><p class="k">累計虧損（含股利）· 台股配色：綠＝跌</p><p class="v" id="rAmt">−2,695,230<small> 元</small></p></div>
-    <div class="tile"><p class="k">沉沒深度</p><p class="v" id="rDepth">5,543 m</p><p class="s" id="rPct">−55.43%</p></div>
-    <div class="tile"><p class="k">當日收盤</p><p class="v" id="rClose">159.5</p><p class="s" id="rChg">−3.04% · 再沉 138 m</p></div>
-    <div class="tile"><p class="k">浮出海面還要漲</p><p class="v up" id="rNeed">+125.2%</p><p class="s" id="rLimit">連拉 9 根漲停</p></div>
-    <div class="tile"><p class="k">殘餘本金</p><p class="v" id="rLeft">44.57%</p><p class="s" id="rDivCash">股利救生圈 —</p></div>
-  </section>
-
-  <section class="card" aria-labelledby="replayTitle">
-    <div class="head"><h2 id="replayTitle">重播航程</h2><span class="meta num" id="dayMeta">—</span></div>
+  <section class="card replay" aria-labelledby="replayTitle">
+    <div class="head"><h2 id="replayTitle">重播航程</h2><span class="meta num" id="dayMeta" aria-live="off">—</span></div>
     <div class="replay-row">
       <button type="button" class="play" id="play" aria-label="從登船那天開始重播">
         <svg id="playIcon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3l12 7-12 7z" fill="currentColor"/></svg>
@@ -92,10 +85,17 @@
       </div>
     </div>
     <p class="event" id="eventLine">—</p>
-    <div class="name-row"><label for="capName">幫船長取名</label><input id="capName" maxlength="8" placeholder="船長" autocomplete="off"></div>
   </section>
 
-  <section class="card" aria-labelledby="qTitle">
+  <section class="readout" aria-label="當日讀數">
+    <div class="loss"><p class="k">累計虧損（含股利）· 台股配色：綠＝跌</p><p class="v" id="rAmt">−2,695,230<small> 元</small></p></div>
+    <div class="tile"><p class="k">沉沒深度</p><p class="v" id="rDepth">5,543 m</p><p class="s" id="rPct">−55.43%</p></div>
+    <div class="tile"><p class="k">當日收盤</p><p class="v" id="rClose">159.5</p><p class="s" id="rChg">−3.04% · 再沉 138 m</p></div>
+    <div class="tile"><p class="k">浮出海面還要漲</p><p class="v up" id="rNeed">+125.2%</p><p class="s" id="rLimit">連拉 9 根漲停</p></div>
+    <div class="tile"><p class="k">殘餘本金</p><p class="v" id="rLeft">44.57%</p><p class="s" id="rDivCash">股利救生圈 —</p></div>
+  </section>
+
+  <section class="card" aria-labelledby="qTitle" hidden>
     <div class="head"><h2 id="qTitle">歷史挑戰：浮還是沉？</h2><span class="meta">用真實股價出題</span></div>
     <div class="q">
       <p class="line num" id="qDay">—</p>
@@ -111,7 +111,7 @@
     <button type="button" class="next" id="qNext">換一題</button>
   </section>
 
-  <section class="card" aria-labelledby="bTitle">
+  <section class="card" aria-labelledby="bTitle" hidden>
     <div class="head"><h2 id="bTitle">成就徽章</h2><span class="meta num" id="bCount">0 / 9</span></div>
     <div class="badges" id="badges"></div>
   </section>
@@ -125,6 +125,6 @@
 
   <p class="foot">純屬朋友間娛樂，不構成任何投資建議。股價來源：Yahoo Finance 每日收盤。</p>
 </div>
-  <script src="js/app.js?v=18"></script>
+  <script src="js/app.js?v=19"></script>
 </body>
 </html>
