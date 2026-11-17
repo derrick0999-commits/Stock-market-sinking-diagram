@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-  <title>青雲 · 沉沒模擬器</title>
+  <title>青雲號 · 沉沒模擬器</title>
   <meta name="description" content="即時沉沒模擬器 — 把套牢深度變成海洋剖面，嘲諷友人的投資沉沒現況。">
   <meta name="theme-color" content="#4a90c2">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,107 +26,105 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- preload + swap：先系統字出屏，字型到位再替換；砍未用字重減量 -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700;900&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=5">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5">
   <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png?v=5">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=5">
-  <link rel="stylesheet" href="css/style.css?v=23">
+  <link rel="stylesheet" href="css/style.css?v=24">
 </head>
 <body>
-  <!-- DER-46：六區塊文流 top → hero → sunk → spark → wreck → cta -->
-  <div class="stage" id="stage">
-    <header class="top">
-      <p class="eyebrow">5386.TWO · 即時沉沒模擬器</p>
-      <h1 class="title">青雲</h1>
-      <p class="sub">平步向下</p>
-    </header>
+<div class="app">
+  <header class="top">
+    <div>
+      <p class="eyebrow" id="eyebrow">5386 · 資料載入中</p>
+      <h1>青雲號</h1>
+      <p class="sub">平步青雲，一路向下</p>
+    </div>
+    <span class="chip num" id="dateChip">—</span>
+  </header>
 
-    <section class="hero" id="hero" aria-label="海面與沉船">
-      <div class="waterline" aria-hidden="true">
-        <span class="lbl">海面 · 解套線 <span id="breakeven-price">—</span></span>
-      </div>
+  <section class="stage" id="stage" aria-label="深海剖面：青雲號目前的沉沒深度">
+    <canvas id="sea" role="img" aria-label="青雲號在深海中的位置"></canvas>
+    <div class="hud">
+      <div class="zone"><span class="zname" id="zname">深淵層</span><span class="zdepth" id="zdepth">5,543 m · 555 atm</span></div>
+      <span class="chip" id="seaChip">大浪</span>
+    </div>
+    <div class="ticker" id="ticker" aria-live="polite"></div>
+    <button type="button" class="dialog" id="dialog" aria-label="跟船長講話">
+      <span class="portrait"><span id="face"></span></span>
+      <span class="dtext">
+        <span class="drow"><span class="dname" id="dname">船長（你朋友）</span><span class="mood" id="mood">崩潰中</span><span class="bpm" aria-label="心跳"><svg width="34" height="14" viewBox="0 0 34 14" aria-hidden="true"><polyline class="ecg" id="ecg" points="0,8 8,8 11,2 14,13 17,5 19,8 34,8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span id="bpm">145</span></span></span>
+        <span class="dline" id="dline">老婆千萬不要打開那個 App。</span>
+        <span class="dhint">點這裡繼續聽他說</span>
+      </span>
+    </button>
+  </section>
 
-      <svg class="ship" id="ship" viewBox="0 0 250 130" aria-label="點船，聽求救與船長訓話">
-        <path d="M12 44 L238 78 L190 104 L36 78 Z" fill="#232f3a"/>
-        <path d="M36 78 L190 104 L158 112 L50 96 Z" fill="#1a242d"/>
-        <rect x="46" y="40" width="70" height="20" rx="2" transform="rotate(9 46 40)" fill="#2f3f4d"/>
-        <rect class="tag" x="146" y="72" width="34" height="13" rx="2" transform="rotate(9 146 72)"/>
-        <text x="163" y="82" text-anchor="middle" font-size="9" font-weight="700" fill="#1a1200" transform="rotate(9 146 72)" font-family="Noto Sans TC">5386</text>
-        <g stroke="#dbe6f0" stroke-width="2.4" fill="none" stroke-linecap="round">
-          <g class="man wave" style="animation-delay:0s">
-            <circle cx="68" cy="30" r="3.3" fill="#dbe6f0" stroke="none"/>
-            <line x1="68" y1="33" x2="68" y2="42"/><line x1="68" y1="42" x2="64" y2="50"/><line x1="68" y1="42" x2="72" y2="50"/>
-            <line x1="68" y1="36" x2="61" y2="27"/><line x1="68" y1="36" x2="75" y2="27"/>
-          </g>
-          <g class="man wave" style="animation-delay:.35s">
-            <circle cx="48" cy="26" r="3.3" fill="#dbe6f0" stroke="none"/>
-            <line x1="48" y1="29" x2="48" y2="38"/><line x1="48" y1="38" x2="44" y2="46"/><line x1="48" y1="38" x2="52" y2="46"/>
-            <line x1="48" y1="32" x2="41" y2="23"/><line x1="48" y1="32" x2="55" y2="23"/>
-          </g>
-          <g class="man wave" style="animation-delay:.7s">
-            <circle cx="92" cy="40" r="3.3" fill="#dbe6f0" stroke="none"/>
-            <line x1="92" y1="43" x2="92" y2="52"/><line x1="92" y1="52" x2="88" y2="60"/><line x1="92" y1="52" x2="96" y2="60"/>
-            <line x1="92" y1="46" x2="85" y2="37"/><line x1="92" y1="46" x2="99" y2="37"/>
-          </g>
-        </g>
-      </svg>
-
-      <div class="surface" aria-hidden="true"></div>
-      <p class="tap-hint" id="hint">▲ 點船，聽船上的人怎麼喊</p>
-      <div class="bubbles" id="bubbles" aria-live="polite"></div>
-    </section>
-
-    <section class="sunk" aria-label="累計虧損">
-      <p class="k">累計虧損 · 總報酬</p>
-      <p class="big"><span id="loss-amount">—</span><small> 元</small></p>
-      <p class="depth">沉沒深度 <b id="loss-pct">—</b>% · 收盤 <span id="close-price">—</span></p>
-    </section>
-
-    <section class="spark" aria-label="下潛軌跡">
-      <p class="spark-lbl" id="spark-lbl">近 26 日下潛軌跡</p>
-      <svg id="spark-svg" viewBox="0 0 320 60" preserveAspectRatio="none" role="img" aria-label="近期處損走勢">
-        <defs>
-          <linearGradient id="spark-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#e8703a" stop-opacity=".35"/>
-            <stop offset="1" stop-color="#e8703a" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <path id="spark-fill" fill="url(#spark-grad)"/>
-        <polyline id="spark-line" fill="none" stroke="#e8703a" stroke-width="2"/>
-        <g id="spark-event" hidden>
-          <line id="spark-event-line" x1="0" y1="2" x2="0" y2="60" stroke="#f0b849" stroke-width="1" stroke-dasharray="3 3"/>
-          <text id="spark-event-text" x="0" y="10" text-anchor="end" fill="#f0b849" font-size="9" font-weight="700" font-family="Noto Sans TC">除權息</text>
-        </g>
-        <circle id="spark-dot" r="3.5" fill="#e8703a" stroke="#fff" stroke-width="1.5"/>
-      </svg>
-      <div class="spark-x">
-        <span id="spark-start">—</span>
-        <span id="spark-end">—</span>
-      </div>
-    </section>
-
-    <section class="wreck" aria-label="殘酷儀表板">
-      <article class="slab hero-slab">
-        <p class="k">浮出海面還需漲</p>
-        <p class="v">+<span id="need-rise">—</span>%</p>
-      </article>
-      <article class="slab">
-        <p class="k">股利救生圈回本</p>
-        <p class="v"><span id="div-yield">—</span>%</p>
-      </article>
-      <article class="slab">
-        <p class="k">只靠配息浮出</p>
-        <p class="v"><span id="div-years">—</span>年</p>
-      </article>
-    </section>
-
-    <button type="button" class="cta" id="btn-share">生成每日沉沒快報 PNG →</button>
+  <div class="actions">
+    <button type="button" class="act" id="buoy" aria-label="丟一個救生圈給船長">
+      <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="9.5" fill="none" stroke="#f2f5f7" stroke-width="6"/><circle cx="14" cy="14" r="9.5" fill="none" stroke="#ff6b6b" stroke-width="6" stroke-dasharray="7.46 7.46"/></svg>
+      丟救生圈 <span class="num" id="buoyCount">0</span>
+    </button>
+    <button type="button" class="act" id="poke">戳船長一下</button>
   </div>
 
-  <canvas id="share-canvas" width="1080" height="1350" hidden aria-hidden="true"></canvas>
-  <script src="js/app.js?v=17"></script>
+  <section class="readout" aria-label="當日讀數">
+    <div class="loss"><p class="k">累計虧損（含股利）· 台股配色：綠＝跌</p><p class="v" id="rAmt">−2,695,230<small> 元</small></p></div>
+    <div class="tile"><p class="k">沉沒深度</p><p class="v" id="rDepth">5,543 m</p><p class="s" id="rPct">−55.43%</p></div>
+    <div class="tile"><p class="k">當日收盤</p><p class="v" id="rClose">159.5</p><p class="s" id="rChg">−3.04% · 再沉 138 m</p></div>
+    <div class="tile"><p class="k">浮出海面還要漲</p><p class="v up" id="rNeed">+125.2%</p><p class="s" id="rLimit">連拉 9 根漲停</p></div>
+    <div class="tile"><p class="k">殘餘本金</p><p class="v" id="rLeft">44.57%</p><p class="s" id="rDivCash">股利救生圈 —</p></div>
+  </section>
+
+  <section class="card" aria-labelledby="replayTitle">
+    <div class="head"><h2 id="replayTitle">重播航程</h2><span class="meta num" id="dayMeta">—</span></div>
+    <div class="replay-row">
+      <button type="button" class="play" id="play" aria-label="從登船那天開始重播">
+        <svg id="playIcon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3l12 7-12 7z" fill="currentColor"/></svg>
+      </button>
+      <div class="slider-wrap">
+        <div class="ticks" id="ticks" aria-hidden="true"></div>
+        <label for="day" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">選擇日期</label>
+        <input type="range" id="day" min="0" max="0" step="1" value="0">
+        <div class="ends"><span id="endStart">—</span><span id="endLast">—</span></div>
+      </div>
+    </div>
+    <p class="event" id="eventLine">—</p>
+    <div class="name-row"><label for="capName">幫船長取名</label><input id="capName" maxlength="8" placeholder="船長" autocomplete="off"></div>
+  </section>
+
+  <section class="card" aria-labelledby="qTitle">
+    <div class="head"><h2 id="qTitle">歷史挑戰：浮還是沉？</h2><span class="meta">用真實股價出題</span></div>
+    <div class="q">
+      <p class="line num" id="qDay">—</p>
+      <svg class="spark" id="qSpark" viewBox="0 0 300 46" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <p class="line" id="qAsk">隔天收盤，青雲號會？</p>
+    </div>
+    <div class="choices">
+      <button type="button" class="choice c-up" id="pickUp">浮起來</button>
+      <button type="button" class="choice c-down" id="pickDown">繼續沉</button>
+    </div>
+    <p class="result" id="qResult" aria-live="polite"></p>
+    <div class="scorebar"><span>猜中 <b id="sHit">0</b> / <b id="sAll">0</b></span><span>連中 <b id="sStreak">0</b></span><span>最佳 <b id="sBest">0</b></span></div>
+    <button type="button" class="next" id="qNext">換一題</button>
+  </section>
+
+  <section class="card" aria-labelledby="bTitle">
+    <div class="head"><h2 id="bTitle">成就徽章</h2><span class="meta num" id="bCount">0 / 9</span></div>
+    <div class="badges" id="badges"></div>
+  </section>
+
+  <section class="card" aria-labelledby="pTitle">
+    <div class="head"><h2 id="pTitle">深海日報</h2><span class="meta">印出重播停在的那一天</span></div>
+    <button type="button" class="press" id="press">印一份深海日報</button>
+    <img class="paper" id="paper" alt="深海日報頭版" hidden>
+    <p class="meta" id="paperHint" hidden>長按圖片可以存到相簿，丟到群組。</p>
+  </section>
+
+  <p class="foot">純屬朋友間娛樂，不構成任何投資建議。股價來源：Yahoo Finance 每日收盤。</p>
+</div>
+  <script src="js/app.js?v=18"></script>
 </body>
 </html>
