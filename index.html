@@ -32,7 +32,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=5">
   <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png?v=5">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=5">
-  <link rel="stylesheet" href="css/style.css?v=27">
+  <link rel="stylesheet" href="css/style.css?v=29">
 </head>
 <body>
 <div class="app">
@@ -64,10 +64,13 @@
   </section>
 
   <div class="actions">
+    <div class="buoy-wrap">
     <button type="button" class="act" id="buoy" aria-label="丟一個救生圈給船長">
       <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="9.5" fill="none" stroke="#f2f5f7" stroke-width="6"/><circle cx="14" cy="14" r="9.5" fill="none" stroke="#ff6b6b" stroke-width="6" stroke-dasharray="7.46 7.46"/></svg>
       丟救生圈 <span class="num" id="buoyCount">0</span>
     </button>
+    <button type="button" class="reset" id="buoyReset" aria-label="救生圈計數歸零" hidden>↺</button>
+    </div>
     <button type="button" class="act" id="poke">戳船長一下</button>
   </div>
 
@@ -125,6 +128,6 @@
 
   <p class="foot">純屬朋友間娛樂，不構成任何投資建議。股價來源：Yahoo Finance 每日收盤。</p>
 </div>
-  <script src="js/app.js?v=19"></script>
+  <script src="js/app.js?v=20"></script>
 </body>
 </html>

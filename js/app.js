@@ -194,6 +194,7 @@ function setBpm(b){$('bpm').textContent=b;$('ecg').style.animationDuration=(60/b
 /* ---------- 單格通報 ---------- */
 let noticeTimer=0;
 function notice(html,kind){const box=$('ticker');box.innerHTML='';const n=document.createElement('div');n.className='notice'+(kind?' '+kind:'');n.innerHTML=html;box.appendChild(n);clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>n.classList.add('out'),3200)}
+function clearNotice(){clearTimeout(noticeTimer);$('ticker').innerHTML=''}
 
 /* ---------- 徽章 ---------- */
 const BADGES=[
@@ -261,7 +262,7 @@ function wireReplay(){
     if(playing){stopPlay();return}
     if(shown>=LAST){setDay(0,false);replayFromStart=true;notice(EVENTS[0]||'');setMood('calm','我研究很久了，這次一定賺。')}else{replayFromStart=shown===0}
     playing=true;setPlayIcon(true);
-    playTimer=setInterval(()=>{if(shown>=LAST){stopPlay();if(replayFromStart)unlock('witness');return}setDay(shown+1,true)},reduce?700:560);
+    playTimer=setInterval(()=>{if(shown>=LAST){stopPlay();clearNotice();if(replayFromStart)unlock('witness');return}setDay(shown+1,true)},reduce?700:560);
   });
 }
 
@@ -280,10 +281,13 @@ photoIn.addEventListener('change',()=>{const f=photoIn.files&&photoIn.files[0];p
 $('unphoto').addEventListener('click',()=>{capPhoto='';store.set('capPhoto','');paintFace(curMood)});
 
 /* ---------- 救生圈 ---------- */
-let buoyCount=store.get('buoys',0);$('buoyCount').textContent=buoyCount;
+let buoyCount=store.get('buoys',0);
+function paintBuoy(){$('buoyCount').textContent=buoyCount;$('buoyReset').hidden=buoyCount===0}
+paintBuoy();
 const buoys=[],ripples=[];
-function throwBuoy(){buoyCount++;store.set('buoys',buoyCount);$('buoyCount').textContent=buoyCount;buoys.push({t:0,sx:0.15+Math.random()*0.7,ox:(Math.random()-.5)*60,rot:Math.random()*6,state:'fly'});setTimeout(()=>say(pick(BUOY_LINES)),850);if(buoyCount>=10)unlock('buoy')}
+function throwBuoy(){buoyCount++;store.set('buoys',buoyCount);paintBuoy();buoys.push({t:0,sx:0.15+Math.random()*0.7,ox:(Math.random()-.5)*60,rot:Math.random()*6,state:'fly'});setTimeout(()=>say(pick(BUOY_LINES)),850);if(buoyCount>=10)unlock('buoy')}
 $('buoy').addEventListener('click',throwBuoy);
+$('buoyReset').addEventListener('click',()=>{buoyCount=0;store.set('buoys',0);paintBuoy();say('救生圈都收回去了？…好，我自己游。')});
 
 /* ---------- 深海畫布 ---------- */
 const cv=$('sea'),ctx=cv.getContext('2d');
