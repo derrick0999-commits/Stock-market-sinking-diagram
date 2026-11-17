@@ -174,7 +174,20 @@ function faceSVG(m){
     brows+eyes+mouth+extra+'</svg>';
 }
 let curMood='panic';
-function setMood(m,line){curMood=m;const M=MOODS[m];$('face').innerHTML=faceSVG(m);$('face').className=reduce?'':M.shake;$('mood').textContent=M.label;$('mood').className='mood '+M.cls;if(line!==false)say(line||pick(M.lines))}
+/* ---------- 船長大頭照（只存在本機瀏覽器，不上傳） ---------- */
+let capPhoto=store.get('capPhoto','')||'';
+if(!/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(capPhoto))capPhoto='';
+const MOOD_EMOJI={smug:'😎',relief:'😌',calm:'🙂',nervous:'😅',scared:'😨',panic:'😭'};
+function paintFace(m){
+  const box=$('face');box.innerHTML='';
+  if(capPhoto){const img=document.createElement('img');img.className='photo m-'+m;img.alt='';img.src=capPhoto;const e=document.createElement('span');e.className='memo';e.textContent=MOOD_EMOJI[m]||'';box.appendChild(img);box.appendChild(e)}
+  else box.innerHTML=faceSVG(m);
+  const u=$('unphoto');if(u)u.hidden=!capPhoto;
+}
+function squarePhoto(file){return new Promise((res,rej)=>{const url=URL.createObjectURL(file);const img=new Image();
+  img.onload=()=>{const w=img.naturalWidth,h=img.naturalHeight,s=Math.min(w,h);const c=document.createElement('canvas');c.width=c.height=160;c.getContext('2d').drawImage(img,(w-s)/2,(h-s)/2,s,s,0,0,160,160);URL.revokeObjectURL(url);res(c.toDataURL('image/jpeg',0.85))};
+  img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('image'))};img.src=url})}
+function setMood(m,line){curMood=m;const M=MOODS[m];paintFace(m);$('face').className=reduce?'':M.shake;$('mood').textContent=M.label;$('mood').className='mood '+M.cls;if(line!==false)say(line||pick(M.lines))}
 function say(t){$('dline').textContent=t;talkFx=1}
 function setBpm(b){$('bpm').textContent=b;$('ecg').style.animationDuration=(60/b).toFixed(2)+'s'}
 
@@ -196,7 +209,7 @@ const BADGES=[
 ];
 let owned=new Set(store.get('badges',[]));['half','typhoon','abyss'].forEach(b=>owned.add(b));
 function renderBadges(fresh){const box=$('badges');box.innerHTML='';BADGES.forEach(b=>{const on=owned.has(b.id);const el=document.createElement('div');el.className='bd'+(on?' on':'')+(fresh===b.id?' fresh':'');el.innerHTML='<span class="disc">'+b.mark+'</span><p class="t">'+b.t+'</p><p class="d">'+(on?b.d:'未解鎖 · '+b.d)+'</p>';box.appendChild(el)});$('bCount').textContent=owned.size+' / '+BADGES.length}
-function unlock(id){if(owned.has(id))return;owned.add(id);store.set('badges',[...owned]);const b=BADGES.find(x=>x.id===id);notice('解鎖徽章 <b>'+b.t+'</b>：'+b.d,'badge');renderBadges(id)}
+function unlock(id){if(owned.has(id))return;owned.add(id);store.set('badges',[...owned]);const b=BADGES.find(x=>x.id===id);const sec=$('badges').closest('section');if(!(sec&&sec.hidden))notice('解鎖徽章 <b>'+b.t+'</b>：'+b.d,'badge');renderBadges(id)}
 renderBadges();
 
 /* ---------- 讀數與重播 ---------- */
@@ -218,7 +231,7 @@ function renderDay(i,announce){
   $('rNeed').textContent=need>0?'+'+need.toFixed(1)+'%':'已解套';
   $('rLimit').textContent=need>0?'連拉 '+limitUps(CLOSE[i])+' 根漲停':'重見天日';
   $('rLeft').textContent=(100-LOSS[i]).toFixed(2)+'%';
-  $('dayMeta').textContent='第 '+(i+1)+' 天 / '+N;
+  $('dayMeta').textContent=(i+1)+' / '+N+' 天';
   $('eventLine').innerHTML=EVENTS[i]||('<b>'+DATES[i]+'</b> 收 '+CLOSE[i]+'，海況'+seaOf(Math.round(c*100)/100)+'。'+(i>0&&LOSS[i]>=maxSoFar[i]&&LOSS[i]>LOSS[i-1]?'又是新深紀錄。':''));
   $('sea').setAttribute('aria-label','青雲號在 '+DATES[i]+' 位於 '+z[0]+'，深度 '+fmt(d)+' 公尺，船長'+MOODS[moodOf(i)].label);
   targetDepth=d;setBpm(bpmOf(i));
@@ -255,11 +268,16 @@ function wireReplay(){
 /* ---------- 跟船長互動 ---------- */
 let talks=store.get('talks',0);
 function talk(lines){talks++;store.set('talks',talks);say(pick(lines));wobble=1;if(talks>=12)unlock('fan')}
-$('dialog').addEventListener('click',()=>talk(MOODS[curMood].lines));
+$('dline').addEventListener('click',()=>talk(MOODS[curMood].lines));
 $('poke').addEventListener('click',()=>{talk(POKE_LINES);setBpm(bpmOf(shown)+12);setTimeout(()=>setBpm(bpmOf(shown)),2500)});
 const nameInput=$('capName');nameInput.value=capName;
-function applyName(){$('dname').textContent=capName?capName+'（船長）':'船長（你朋友）'}
-nameInput.addEventListener('input',()=>{capName=nameInput.value.trim().slice(0,8);store.set('capName',capName);applyName()});applyName();
+nameInput.addEventListener('input',()=>{capName=nameInput.value.trim().slice(0,8);store.set('capName',capName)});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter')nameInput.blur()});
+const photoIn=$('photoIn');
+$('portrait').addEventListener('click',()=>photoIn.click());
+photoIn.addEventListener('change',()=>{const f=photoIn.files&&photoIn.files[0];photoIn.value='';if(!f)return;
+  squarePhoto(f).then(u=>{capPhoto=u;store.set('capPhoto',u);paintFace(curMood);say('這張照片…你們從哪裡拿到的？')}).catch(()=>notice('<b>照片讀不到</b>：換一張試試看。'))});
+$('unphoto').addEventListener('click',()=>{capPhoto='';store.set('capPhoto','');paintFace(curMood)});
 
 /* ---------- 救生圈 ---------- */
 let buoyCount=store.get('buoys',0);$('buoyCount').textContent=buoyCount;
@@ -419,7 +437,7 @@ function failUI(err){
     if($('eyebrow')) $('eyebrow').textContent='5386 · 資料暫時讀不到';
     if($('dline')) $('dline').textContent='資料暫時讀不到，晚點再上船';
     if($('mood')) {$('mood').textContent='淡定';$('mood').className='mood calm'}
-    if($('face')) $('face').innerHTML=faceSVG('calm');
+    if($('face')) paintFace('calm');
     shipDepth=0; targetDepth=0; shown=0;
     resize();
     if(!raf) raf=requestAnimationFrame(frame);
